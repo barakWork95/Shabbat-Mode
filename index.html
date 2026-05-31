@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shabbat Mode – סגור את האתר לכבוד השבת</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;700;900&family=DM+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --night: #0d0d1a;
+        --deep: #12122a;
+        --gold: #c9a84c;
+        --gold-light: #e8c97a;
+        --white: #f5f0e8;
+        --muted: #8a8aaa;
+        --card: #16162e;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        background: var(--night);
+        color: var(--white);
+        font-family: "Heebo", sans-serif;
+        overflow-x: hidden;
+      }
+
+      /* --- כוכבים ברקע --- */
+      .stars {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 0;
+      }
+      .star {
+        position: absolute;
+        border-radius: 50%;
+        background: white;
+        animation: twinkle var(--d, 3s) ease-in-out infinite;
+        opacity: 0;
+      }
+      @keyframes twinkle {
+        0%,
+        100% {
+          opacity: 0;
+        }
+        50% {
+          opacity: var(--o, 0.6);
+        }
+      }
+
+      /* --- HERO --- */
+      .hero {
+        position: relative;
+        z-index: 1;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 4rem 2rem;
+      }
+
+      .lang-toggle {
+        position: fixed;
+        top: 1.5rem;
+        left: 1.5rem;
+        z-index: 100;
+        display: flex;
+        gap: 0.5rem;
+      }
+      .lang-btn {
+        background: var(--card);
+        border: 1px solid #2a2a4a;
+        color: var(--muted);
+        padding: 0.4rem 0.8rem;
+        border-radius: 6px;
+        cursor: pointer;
+        font-family: "DM Mono", monospace;
+        font-size: 0.75rem;
+        transition: all 0.2s;
+      }
+      .lang-btn.active {
+        border-color: var(--gold);
+        color: var(--gold);
+      }
+
+      .menorah {
+        font-size: 4rem;
+        margin-bottom: 1.5rem;
+        animation: glow 3s ease-in-out infinite;
+        filter: drop-shadow(0 0 20px rgba(201, 168, 76, 0.5));
+      }
+      @keyframes glow {
+        0%,
+        100% {
+          filter: drop-shadow(0 0 15px rgba(201, 168, 76, 0.4));
+        }
+        50% {
+          filter: drop-shadow(0 0 35px rgba(201, 168, 76, 0.8));
+        }
+      }
+
+      .hero h1 {
+        font-size: clamp(2.5rem, 6vw, 5rem);
+        font-weight: 900;
+        line-height: 1.1;
+        color: var(--white);
+        margin-bottom: 1rem;
+      }
+      .hero h1 span {
+        color: var(--gold);
+      }
+
+      .hero p {
+        font-size: clamp(1rem, 2vw, 1.3rem);
+        color: var(--muted);
+        max-width: 600px;
+        line-height: 1.7;
+        margin-bottom: 2.5rem;
+      }
+
+      .cta-group {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .btn-primary {
+        background: var(--gold);
+        color: var(--night);
+        padding: 0.9rem 2rem;
+        border-radius: 8px;
+        font-family: "Heebo", sans-serif;
+        font-weight: 700;
+        font-size: 1rem;
+        text-decoration: none;
+        transition: all 0.2s;
+        border: none;
+        cursor: pointer;
+      }
+      .btn-primary:hover {
+        background: var(--gold-light);
+        transform: translateY(-2px);
+      }
+
+      .btn-secondary {
+        background: transparent;
+        color: var(--white);
+        padding: 0.9rem 2rem;
+        border-radius: 8px;
+        font-family: "Heebo", sans-serif;
+        font-size: 1rem;
+        text-decoration: none;
+        border: 1px solid #2a2a4a;
+        transition: all 0.2s;
+      }
+      .btn-secondary:hover {
+        border-color: var(--gold);
+        color: var(--gold);
+      }
+
+      /* --- DIVIDER --- */
+      .divider {
+        position: relative;
+        z-index: 1;
+        text-align: center;
+        padding: 1rem 0;
+        color: var(--gold);
+        font-size: 1.5rem;
+        opacity: 0.4;
+      }
+
+      /* --- FEATURES --- */
+      .features {
+        position: relative;
+        z-index: 1;
+        padding: 5rem 2rem;
+        max-width: 1100px;
+        margin: 0 auto;
+      }
+
+      .section-title {
+        text-align: center;
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 3rem;
+        color: var(--white);
+      }
+      .section-title span {
+        color: var(--gold);
+      }
+
+      .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 1.5rem;
+      }
+
+      .feature-card {
+        background: var(--card);
+        border: 1px solid #1e1e3a;
+        border-radius: 12px;
+        padding: 2rem;
+        transition: border-color 0.3s;
+      }
+      .feature-card:hover {
+        border-color: var(--gold);
+      }
+      .feature-icon {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+      }
+      .feature-card h3 {
+        font-size: 1.2rem;
+        margin-bottom: 0.5rem;
+        color: var(--white);
+      }
+      .feature-card p {
+        color: var(--muted);
+        font-size: 0.95rem;
+        line-height: 1.6;
+      }
+
+      /* --- HOW IT WORKS --- */
+      .how {
+        position: relative;
+        z-index: 1;
+        padding: 5rem 2rem;
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      .steps {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        margin-top: 3rem;
+      }
+
+      .step {
+        display: flex;
+        gap: 1.5rem;
+        align-items: flex-start;
+      }
+
+      .step-num {
+        min-width: 2.5rem;
+        height: 2.5rem;
+        background: var(--gold);
+        color: var(--night);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 1rem;
+        flex-shrink: 0;
+      }
+
+      .step-content h3 {
+        font-size: 1.1rem;
+        margin-bottom: 0.3rem;
+      }
+      .step-content p {
+        color: var(--muted);
+        font-size: 0.95rem;
+        line-height: 1.6;
+      }
+
+      /* --- PREVIEW --- */
+      .preview {
+        position: relative;
+        z-index: 1;
+        padding: 5rem 2rem;
+        text-align: center;
+      }
+
+      .preview-box {
+        max-width: 700px;
+        margin: 3rem auto 0;
+        background: #1a1a2e;
+        border-radius: 16px;
+        border: 1px solid #2a2a4a;
+        padding: 4rem 2rem;
+        box-shadow: 0 40px 80px rgba(0, 0, 0, 0.5);
+      }
+      .preview-box .p-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+      }
+      .preview-box h2 {
+        font-size: 1.8rem;
+        margin-bottom: 0.5rem;
+      }
+      .preview-box p {
+        color: var(--muted);
+      }
+      .preview-box .p-time {
+        margin-top: 1rem;
+        font-size: 0.9rem;
+        opacity: 0.5;
+        font-family: "DM Mono", monospace;
+      }
+
+      /* --- CTA BOTTOM --- */
+      .cta-bottom {
+        position: relative;
+        z-index: 1;
+        padding: 6rem 2rem;
+        text-align: center;
+        background: linear-gradient(
+          to bottom,
+          transparent,
+          rgba(201, 168, 76, 0.05)
+        );
+      }
+      .cta-bottom h2 {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+      }
+      .cta-bottom p {
+        color: var(--muted);
+        margin-bottom: 2rem;
+      }
+
+      /* --- FOOTER --- */
+      footer {
+        position: relative;
+        z-index: 1;
+        text-align: center;
+        padding: 2rem;
+        border-top: 1px solid #1e1e3a;
+        color: var(--muted);
+        font-size: 0.85rem;
+        font-family: "DM Mono", monospace;
+      }
+      footer a {
+        color: var(--gold);
+        text-decoration: none;
+      }
+
+      /* --- LTR override --- */
+      html[dir="ltr"] {
+        direction: ltr;
+      }
+      html[dir="ltr"] .lang-toggle {
+        left: auto;
+        right: 1.5rem;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- כוכבים -->
+    <div class="stars" id="stars"></div>
+
+    <!-- בורר שפה -->
+    <div class="lang-toggle">
+      <button class="lang-btn active" onclick="setLang('he')">עב</button>
+      <button class="lang-btn" onclick="setLang('en')">EN</button>
+    </div>
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="menorah">🕍</div>
+      <h1
+        data-he="האתר שלך <span>שומר שבת</span>"
+        data-en="Your website <span>keeps Shabbat</span>"
+      ></h1>
+      <p
+        data-he="תוסף קטן שסוגר את האתר שלך אוטומטית מכניסת שבת עד צאת שבת. ללא מגע יד אדם, ללא קוד מסובך."
+        data-en="A small plugin that automatically closes your website from candle lighting until Havdalah. No manual work. No complex code."
+      ></p>
+      <div class="cta-group">
+        <a
+          href="https://github.com/barakWork95/Shabbat-Mode"
+          class="btn-primary"
+          data-he="הורד חינם ←"
+          data-en="Download Free →"
+        ></a>
+        <a
+          href="#how"
+          class="btn-secondary"
+          data-he="איך זה עובד?"
+          data-en="How does it work?"
+        ></a>
+      </div>
+    </section>
+
+    <div class="divider">✦ ✦ ✦</div>
+
+    <!-- FEATURES -->
+    <section class="features">
+      <h2
+        class="section-title"
+        data-he="למה <span>Shabbat Mode</span>?"
+        data-en="Why <span>Shabbat Mode</span>?"
+      ></h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">⏱️</div>
+          <h3 data-he="אוטומטי לחלוטין" data-en="Fully Automatic"></h3>
+          <p
+            data-he="מתחבר ל-API שמחשב את זמני השבת המדויקים לפי העיר שלך כל שבוע מחדש."
+            data-en="Connects to an API that calculates exact Shabbat times for your city, every week automatically."
+          ></p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🌍</div>
+          <h3 data-he="כל עיר בעולם" data-en="Any City Worldwide"></h3>
+          <p
+            data-he="תל אביב, ירושלים, ניו יורק, לונדון – פשוט מכניסים את שם העיר וזהו."
+            data-en="Tel Aviv, Jerusalem, New York, London – just enter your city name and you're done."
+          ></p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🎨</div>
+          <h3 data-he="מותאם אישית" data-en="Fully Customizable"></h3>
+          <p
+            data-he="צבעים, שפה, שעת מוצאי שבת – הכל ניתן לשינוי מממשק פשוט."
+            data-en="Colors, language, Havdalah time display – all configurable from a simple interface."
+          ></p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">⚡</div>
+          <h3 data-he="קל להתקנה" data-en="Easy to Install"></h3>
+          <p
+            data-he="לוורדפרס – תוסף בלחיצת כפתור. לכל אתר אחר – הדבקת שורת קוד אחת."
+            data-en="For WordPress – one-click plugin. For any other site – paste one line of code."
+          ></p>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider">✦</div>
+
+    <!-- HOW IT WORKS -->
+    <section class="how" id="how">
+      <h2
+        class="section-title"
+        data-he="איך זה <span>עובד?</span>"
+        data-en="How does it <span>work?</span>"
+      ></h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <h3 data-he="מתקינים את התוסף" data-en="Install the plugin"></h3>
+            <p
+              data-he="מורידים מגיטהאב ומעלים לאתר הוורדפרס, או מדביקים שורת קוד אחת בכל אתר אחר."
+              data-en="Download from GitHub and upload to your WordPress site, or paste one line of code into any other site."
+            ></p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <h3 data-he="מגדירים את העיר שלכם" data-en="Set your city"></h3>
+            <p
+              data-he="מכניסים את שם העיר בעברית או באנגלית – התוסף מוצא את הזמנים המדויקים."
+              data-en="Enter your city name in Hebrew or English – the plugin finds the exact times."
+            ></p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <h3 data-he="שבת שלום 🕯️" data-en="Shabbat Shalom 🕯️"></h3>
+            <p
+              data-he="מכניסת שבת האתר יציג מסך מכובד לגולשים, ויחזור לפעילות מלאה במוצאי שבת."
+              data-en="From candle lighting, the site displays a respectful screen to visitors, and returns to full operation after Shabbat."
+            ></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider">✦</div>
+
+    <!-- PREVIEW -->
+    <section class="preview">
+      <h2
+        class="section-title"
+        data-he="כך <span>נראה</span> הגולש שלך בשבת"
+        data-en="This is what your visitor <span>sees</span> on Shabbat"
+      ></h2>
+      <div class="preview-box">
+        <div class="p-icon">✡️</div>
+        <h2
+          data-he="האתר סגור לכבוד השבת"
+          data-en="The site is closed for Shabbat"
+        ></h2>
+        <p
+          data-he="נשמח לשרת אתכם במוצאי שבת"
+          data-en="We'll be happy to serve you after Shabbat"
+        ></p>
+        <p
+          class="p-time"
+          data-he="האתר יחזור לפעילות בשעה 20:27"
+          data-en="The site will reopen at 20:27"
+        ></p>
+      </div>
+    </section>
+
+    <!-- CTA BOTTOM -->
+    <section class="cta-bottom">
+      <h2 data-he="מוכנים לשמור שבת?" data-en="Ready to keep Shabbat?"></h2>
+      <p
+        data-he="חינמי לחלוטין. קוד פתוח. עובד תוך דקות."
+        data-en="Completely free. Open source. Works in minutes."
+      ></p>
+      <div class="cta-group">
+        <a
+          href="https://github.com/barakWork95/Shabbat-Mode"
+          class="btn-primary"
+          data-he="הורד מגיטהאב ←"
+          data-en="Download from GitHub →"
+        ></a>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+      <p>
+        Shabbat Mode &copy; 2026 &nbsp;·&nbsp;
+        <a href="https://github.com/barakWork95/Shabbat-Mode">GitHub</a>
+        &nbsp;·&nbsp; GPL-2.0
+      </p>
+    </footer>
+
+    <script>
+      // כוכבים
+      const container = document.getElementById("stars");
+      for (let i = 0; i < 120; i++) {
+        const s = document.createElement("div");
+        s.className = "star";
+        const size = Math.random() * 2.5 + 0.5;
+        s.style.cssText = `
+      width:${size}px; height:${size}px;
+      top:${Math.random() * 100}%;
+      left:${Math.random() * 100}%;
+      --d:${2 + Math.random() * 4}s;
+      --o:${0.3 + Math.random() * 0.7};
+      animation-delay:${Math.random() * 5}s;
+    `;
+        container.appendChild(s);
+      }
+
+      // בורר שפה
+      let currentLang = "he";
+
+      function setLang(lang) {
+        currentLang = lang;
+        const html = document.documentElement;
+        html.setAttribute("lang", lang);
+        html.setAttribute("dir", lang === "he" ? "rtl" : "ltr");
+
+        document.querySelectorAll("[data-" + lang + "]").forEach((el) => {
+          el.innerHTML = el.getAttribute("data-" + lang);
+        });
+
+        document.querySelectorAll(".lang-btn").forEach((btn) => {
+          btn.classList.toggle(
+            "active",
+            btn.textContent
+              .trim()
+              .toLowerCase()
+              .includes(lang === "he" ? "ע" : "en")
+          );
+        });
+      }
+
+      // טעינה ראשונית
+      setLang("he");
+    </script>
+  </body>
+</html>
